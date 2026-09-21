@@ -1,0 +1,15 @@
+# Datos crudos de Kaggle (pesados, cada uno los baja por su cuenta)
+data/raw/*
+!data/raw/.gitkeep
+
+# Submissions generadas (se regeneran corriendo el notebook)
+submissions/*.csv
+
+# Python / Jupyter / VS Code
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+.vscode/
+.DS_Store
