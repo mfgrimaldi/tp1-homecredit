@@ -23,7 +23,7 @@ submissions/      CSV generados (no se suben a git)
 ## Cómo arrancar
 
 1. Instalar dependencias en tu entorno de Python: `pip install -r requirements.txt`
-2. Bajar los datos de Kaggle y dejarlos en `data/raw/` (al menos `application_train.csv` y `application_test.csv`). Alternativa: dejarlos en la carpeta que contiene al repo; `src/config.py` los busca ahí si `data/raw/` está vacío.
+2. Bajar los datos de Kaggle y dejarlos en `data/raw/` (al menos `application_train.csv` y `application_test.csv`). También se pueden dejar en una carpeta `Archivos_TP/` al lado del repo, en la carpeta que contiene al repo, o en cualquier ruta indicada con la variable de entorno `TP_DATA_DIR`. `src/config.py` usa la primera que encuentre con `application_train.csv`.
 3. Los folds ya están generados en `data/folds.csv`. Solo si hiciera falta regenerarlos (desde la raíz del repo): `python -m src.make_folds`
 4. Correr `notebooks/01_baseline_logistica.ipynb`. Deja la submission en `submissions/`.
 
