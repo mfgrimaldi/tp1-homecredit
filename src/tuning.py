@@ -52,7 +52,10 @@ def _suggest(trial: optuna.Trial) -> dict:
 
 def tune_lgbm(X: pd.DataFrame, y: pd.Series, folds: pd.Series, n_trials: int = 30) -> optuna.Study:
     """Corre la búsqueda y devuelve el estudio de Optuna (con todas las pruebas)."""
-    dtrain = lgb.Dataset(_to_category(X), label=y, free_raw_data=False)
+    # feature_pre_filter=False: el Dataset se reutiliza en todas las pruebas, y sin esto
+    # LightGBM no deja bajar min_child_samples respecto de la primera prueba
+    dtrain = lgb.Dataset(_to_category(X), label=y, free_raw_data=False,
+                         params={"feature_pre_filter": False})
     cv_folds = _fold_indices(folds)
 
     def objective(trial: optuna.Trial) -> float:
