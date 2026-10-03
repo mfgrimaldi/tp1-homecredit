@@ -1,0 +1,2 @@
+bloque,n_features,folds,auc_oof,auc_medio_fold,desvio_fold,aporte_auc
+application,60,5,0.758647857473181,0.7586657744337801,0.004161850028320997,0.0

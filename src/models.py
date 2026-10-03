@@ -37,6 +37,34 @@ def build_logistic(C: float = 1.0) -> Pipeline:
     ])
 
 
+def build_xgboost(**params):
+    """XGBoost con categóricas nativas (requiere columnas dtype 'category').
+
+    No necesita imputar ni escalar: maneja NaN solo y los árboles son invariantes
+    a la escala. Los hiperparámetros son un punto de partida razonable, todavía
+    sin optimizar (eso va en la etapa de búsqueda de hiperparámetros).
+    """
+    from xgboost import XGBClassifier
+
+    defaults = dict(
+        n_estimators=600,     # en el fold 0 el AUC de validación se estabiliza ~600 árboles
+        learning_rate=0.03,
+        max_depth=5,
+        min_child_weight=5,
+        subsample=0.8,         # fracción de filas por árbol
+        colsample_bytree=0.7,  # fracción de columnas por árbol
+        reg_lambda=1.0,
+        tree_method="hist",
+        enable_categorical=True,
+        max_cat_to_onehot=1,   # categóricas con split óptimo por particiones
+        eval_metric="auc",
+        n_jobs=-1,
+        random_state=42,
+    )
+    defaults.update(params)
+    return XGBClassifier(**defaults)
+
+
 def get_features(df: pd.DataFrame, drop: tuple = ("SK_ID_CURR", "TARGET")) -> pd.DataFrame:
     """Columnas que entran al modelo: todo menos el ID y el target."""
     return df.drop(columns=[c for c in drop if c in df.columns])

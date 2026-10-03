@@ -2,6 +2,10 @@
 data/raw/*
 !data/raw/.gitkeep
 
+# Features agregadas (pesadas y reproducibles: python -m src.features_bureau)
+data/features_*.parquet
+data/features_*.csv.gz
+
 # Submissions generadas (se regeneran corriendo el notebook)
 submissions/*.csv
 
