@@ -30,7 +30,7 @@
 
 \setlength{\parindent}{1.3em}
 \setlength{\parskip}{0.5ex plus 0.3ex}
-\linespread{1.25}
+\linespread{1.20}
 \renewcommand{\arraystretch}{1.25}
 \setlist{nosep,leftmargin=1.4em,topsep=0.4ex,itemsep=0.3ex}
 \captionsetup{skip=4pt}
@@ -106,11 +106,11 @@ El objetivo es predecir la probabilidad de que un cliente tenga dificultades de 
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-application\_\allowbreak{}train / test & Una fila por préstamo solicitado (122 columnas) & 307.511 / 48.744 \\ \midrule
-bureau & Créditos del cliente en otras entidades & 1,7 M \\ \midrule
-previous\_\allowbreak{}application & Solicitudes anteriores en Home Credit & 1,7 M \\ \midrule
-installments\_\allowbreak{}payments & Pagos de cuotas de créditos anteriores & 13,6 M \\ \midrule
-bureau\_\allowbreak{}balance & Estado mes a mes de cada crédito del bureau & 27,3 M \\ \midrule
+application\_\allowbreak{}train / test & Una fila por préstamo solicitado (122 columnas) & 307.511 / 48.744 \\
+bureau & Créditos del cliente en otras entidades & 1,7 M \\
+previous\_\allowbreak{}application & Solicitudes anteriores en Home Credit & 1,7 M \\
+installments\_\allowbreak{}payments & Pagos de cuotas de créditos anteriores & 13,6 M \\
+bureau\_\allowbreak{}balance & Estado mes a mes de cada crédito del bureau & 27,3 M \\
 POS\_\allowbreak{}CASH, credit\_\allowbreak{}card & Historiales mensuales (no utilizados) & --- \\
 \end{longtable}
 
@@ -151,14 +151,14 @@ Sobre la tabla principal construimos variables que capturan relaciones económic
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-CREDIT\_\allowbreak{}INCOME\_\allowbreak{}RATIO & préstamo / ingreso & Cuántos ingresos anuales debe \\ \midrule
-ANNUITY\_\allowbreak{}INCOME\_\allowbreak{}RATIO & cuota / ingreso & Qué parte del ingreso se va en la cuota \\ \midrule
-CREDIT\_\allowbreak{}TERM & cuota / préstamo & ≈ 1/plazo: cuota alta implica plazo corto \\ \midrule
-GOODS\_\allowbreak{}CREDIT\_\allowbreak{}RATIO & precio del bien / préstamo & Menor a 1 si financia más que el bien \\ \midrule
-INCOME\_\allowbreak{}PER\_\allowbreak{}PERSON & ingreso / miembros del hogar & Ingreso disponible por persona \\ \midrule
-AGE\_\allowbreak{}YEARS, EMPLOYED\_\allowbreak{}AGE\_\allowbreak{}RATIO & edad; días trabajados / días de vida & Edad y estabilidad laboral \\ \midrule
-DAYS\_\allowbreak{}EMPLOYED\_\allowbreak{}ANOM & marca DAYS\_\allowbreak{}EMPLOYED = 365.243 & Valor centinela en el 18\% de las filas; el original pasa a nulo \\ \midrule
-EXT\_\allowbreak{}SOURCE\_\allowbreak{}MEAN/\allowbreak MIN/\allowbreak MAX/\allowbreak STD & resúmenes de los 3 scores externos & EXT\_\allowbreak{}SOURCE\_\allowbreak{}1 falta en 56\%: el resumen aprovecha los disponibles \\ \midrule
+CREDIT\_\allowbreak{}INCOME\_\allowbreak{}RATIO & préstamo / ingreso & Cuántos ingresos anuales debe \\
+ANNUITY\_\allowbreak{}INCOME\_\allowbreak{}RATIO & cuota / ingreso & Qué parte del ingreso se va en la cuota \\
+CREDIT\_\allowbreak{}TERM & cuota / préstamo & ≈ 1/plazo: cuota alta implica plazo corto \\
+GOODS\_\allowbreak{}CREDIT\_\allowbreak{}RATIO & precio del bien / préstamo & Menor a 1 si financia más que el bien \\
+INCOME\_\allowbreak{}PER\_\allowbreak{}PERSON & ingreso / miembros del hogar & Ingreso disponible por persona \\
+AGE\_\allowbreak{}YEARS, EMPLOYED\_\allowbreak{}AGE\_\allowbreak{}RATIO & edad; días trabajados / días de vida & Edad y estabilidad laboral \\
+DAYS\_\allowbreak{}EMPLOYED\_\allowbreak{}ANOM & marca DAYS\_\allowbreak{}EMPLOYED = 365.243 & Valor centinela en el 18\% de las filas; el original pasa a nulo \\
+EXT\_\allowbreak{}SOURCE\_\allowbreak{}MEAN/\allowbreak MIN/\allowbreak MAX/\allowbreak STD & resúmenes de los 3 scores externos & EXT\_\allowbreak{}SOURCE\_\allowbreak{}1 falta en 56\%: el resumen aprovecha los disponibles \\
 DOCS\_\allowbreak{}COUNT & suma de FLAG\_\allowbreak{}DOCUMENT\_\allowbreak{}* & Documentos presentados \\
 \end{longtable}
 
@@ -194,22 +194,18 @@ Medido con la misma logística y los mismos folds, agregando un bloque a la vez:
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-0. Baseline sin feature engineering & 120 & 0,7448 & --- \\ \midrule
-1. + ratios de application & 134 & 0,7495 & +0,0047 \\ \midrule
-2. + bureau & 146 & 0,7531 & +0,0036 \\ \midrule
-3. + previous\_\allowbreak{}application & 154 & 0,7587 & +0,0056 \\ \midrule
+0. Baseline sin feature engineering & 120 & 0,7448 & --- \\
+1. + ratios de application & 134 & 0,7495 & +0,0047 \\
+2. + bureau & 146 & 0,7531 & +0,0036 \\
+3. + previous\_\allowbreak{}application & 154 & 0,7587 & +0,0056 \\
 4. + installments\_\allowbreak{}payments & 160 & 0,7628 & +0,0041 \\
 \end{longtable}
 
-\begin{figure}[H]
+\begin{figure}[htb]
 \centering
 \includegraphics[width=0.90\linewidth]{media/figura1_auc_por_etapa.png}
 \caption*{Figura 1. AUC por etapa (validación cruzada) y score de Kaggle Private de las dos submissions.}
-\end{figure}\textbf{Un bloque adicional, medido y descartado.} Los bloques anteriores dejan afuera bureau\_\allowbreak{}balance, el estado mes a mes de cada crédito reportado al Credit Bureau y, con 27,3 millones de filas, la tabla más grande del conjunto. Como tiene una fila por crédito y por mes, resumirla exige una agregación en dos niveles: primero el historial mensual de cada crédito y después los créditos de cada cliente. Construimos así 78 variables, entre ellas la proporción de meses en mora de cada crédito, el peor tramo de atraso alcanzado y los meses en mora del último año, que es información que los agregados simples de bureau no distinguen de una mora antigua.
-
-\textbf{Resultado de la comparación.} Medido contra el bloque de bureau ya incorporado, con los mismos folds y el mismo LightGBM optimizado, el AUC out-of-fold pasa de 0,7846 a 0,7867, con mejora en los cinco folds (diferencia media de 0,0021 y desvío de 0,0009). Usar las dos versiones de bureau juntas no aporta nada adicional (0,7867), señal de que miden lo mismo. Aun así mantuvimos el modelo final sin este bloque: la mejora es del mismo orden que el sesgo optimista ya señalado sobre el 0,7847, que es el mejor de 30 pruebas evaluadas sobre estos mismos folds. El experimento deja una conclusión de rendimiento decreciente: el historial mensual representa el 94\% de las filas de las tablas del bureau y aporta 0,002 de AUC, porque la señal ya estaba casi toda capturada por el resumen a nivel crédito. El código y la comparación completa quedan en el repositorio (src/features\_\allowbreak{}bureau.py y resultados\_\allowbreak{}bureau/).
-
-\subsection*{1.4 Codificación de variables categóricas}
+\end{figure}\subsection*{1.4 Codificación de variables categóricas}
 
 Para la logística usamos one-hot, agrupando las categorías con menos del 1\% de las filas para no crear columnas ruidosas; las numéricas se imputan por mediana y se estandarizan, porque la regularización lo requiere. Para LightGBM comparamos one-hot contra su manejo nativo de categóricas: 0,7827 ± 0,0036 contra 0,7823 ± 0,0030. La diferencia (0,0004) es mucho menor que la variación entre folds, así que es ruido; elegimos la codificación nativa por ser más simple y rápida.
 
@@ -240,12 +236,12 @@ La optimización se hizo con Optuna (algoritmo TPE), que propone cada combinaci�
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-num\_\allowbreak{}leaves (hojas por árbol) & 8 -- 128 (log) & 9 \\ \midrule
-min\_\allowbreak{}child\_\allowbreak{}samples & 20 -- 500 (log) & 47 \\ \midrule
-subsample (filas por árbol) & 0,5 -- 1,0 & ≈ 1,0 \\ \midrule
-colsample\_\allowbreak{}bytree (columnas por árbol) & 0,1 -- 0,8 & 0,34 \\ \midrule
-reg\_\allowbreak{}lambda (L2) & 0,001 -- 30 (log) & 6,8 \\ \midrule
-reg\_\allowbreak{}alpha (L1) & 0,001 -- 10 (log) & 7,6 \\ \midrule
+num\_\allowbreak{}leaves (hojas por árbol) & 8 -- 128 (log) & 9 \\
+min\_\allowbreak{}child\_\allowbreak{}samples & 20 -- 500 (log) & 47 \\
+subsample (filas por árbol) & 0,5 -- 1,0 & ≈ 1,0 \\
+colsample\_\allowbreak{}bytree (columnas por árbol) & 0,1 -- 0,8 & 0,34 \\
+reg\_\allowbreak{}lambda (L2) & 0,001 -- 30 (log) & 6,8 \\
+reg\_\allowbreak{}alpha (L1) & 0,001 -- 10 (log) & 7,6 \\
 Cantidad de árboles & early stopping & 2.357 con lr 0,05 \\
 \end{longtable}
 
@@ -272,7 +268,7 @@ Para el modelo final bajamos el learning rate a 0,02 y escalamos los árboles en
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Logística baseline & 0,7448 & 0,7333 & 0,7368 \\ \midrule
+Logística baseline & 0,7448 & 0,7333 & 0,7368 \\
 LightGBM + FE + Optuna & 0,7847 & 0,7824 & 0,7869 \\
 \end{longtable}
 
@@ -282,7 +278,7 @@ Como referencia, el primer puesto de la competencia obtuvo aproximadamente 0,806
 
 Entrenamos el LightGBM final con todo el conjunto de entrenamiento y aplicamos dos técnicas. La importancia por ganancia mide cuánto mejoró el modelo en los cortes que usan cada variable: dice qué variables usa más, pero no en qué dirección empujan. Los valores SHAP indican, para cada cliente, cuánto suma o resta cada variable respecto del promedio, en escala log-odds: dicen qué pesa y hacia dónde. Se calcularon sobre una muestra de 10.000 clientes.
 
-\begin{figure}[H]
+\begin{figure}[htb]
 \centering
 \includegraphics[width=0.83\linewidth]{media/figura2_shap_importancia.png}
 \caption*{Figura 2. Importancia global (media del valor absoluto de SHAP). En azul, las variables creadas en el feature engineering: 10 de las 15 principales.}
@@ -297,7 +293,7 @@ Entrenamos el LightGBM final con todo el conjunto de entrenamiento y aplicamos d
   Financiar más que el bien y haber tomado plazos largos antes aumentan el riesgo; por tipo de organización, los empleados de escuelas presentan el menor riesgo y los autónomos el mayor.
 \end{itemize}
 
-\begin{figure}[H]
+\begin{figure}[htb]
 \centering
 \includegraphics[width=0.89\linewidth]{media/figura3_shap_dependencia.png}
 \caption*{Figura 3. Efecto SHAP según el valor de la variable, para cuatro variables creadas en el feature engineering.}
@@ -309,7 +305,13 @@ Entrenamos el LightGBM final con todo el conjunto de entrenamiento y aplicamos d
 
 \textbf{Un efecto contraintuitivo.} Los clientes a quienes se les otorgó más de lo que pidieron presentan mayor riesgo. Probablemente refleje seguros u otros extras financiados dentro del préstamo, más que una decisión del cliente; queda como hipótesis a verificar.
 
-\subsection*{1.9 Conclusiones de la Parte 1}
+\subsection*{1.9 Otros análisis y pruebas descartados}
+
+Los bloques anteriores dejan afuera bureau\_\allowbreak{}balance, el estado mes a mes de cada crédito reportado al Credit Bureau y, con 27,3 millones de filas, la tabla más grande del conjunto. Como tiene una fila por crédito y por mes, resumirla exige una agregación en dos niveles: primero el historial mensual de cada crédito y después los créditos de cada cliente. Construimos así 78 variables, entre ellas la proporción de meses en mora de cada crédito, el peor tramo de atraso alcanzado y los meses en mora del último año, que es información que los agregados simples de bureau no distinguen de una mora antigua.
+
+Medido contra el bloque de bureau ya incorporado, con los mismos folds y el mismo LightGBM optimizado, el AUC out-of-fold pasa de 0,7846 a 0,7867, con mejora en los cinco folds (diferencia media de 0,0021 y desvío de 0,0009). Usar las dos versiones de bureau juntas no aporta nada adicional (0,7867), señal de que miden lo mismo. Aun así mantuvimos el modelo final sin este bloque: la mejora es del mismo orden que el sesgo optimista ya señalado sobre el 0,7847, que es el mejor de 30 pruebas evaluadas sobre estos mismos folds. El experimento deja una conclusión de rendimiento decreciente: el historial mensual representa el 94\% de las filas de las tablas del bureau y aporta 0,002 de AUC, porque la señal ya estaba casi toda capturada por el resumen a nivel crédito. El código y la comparación completa quedan en el repositorio (src/features\_\allowbreak{}bureau.py y resultados\_\allowbreak{}bureau/).
+
+\subsection*{1.10 Conclusiones de la Parte 1}
 
 \textbf{Qué aprendimos.} El recorrido de 0,7448 a 0,7847 muestra que el valor estuvo en los datos y no en el ajuste fino del modelo: las variables construidas sobre las tablas auxiliares aportaron 0,018 y el cambio de familia de modelo 0,020, contra 0,002 de la optimización de hiperparámetros. El segundo aprendizaje es que el detalle tiene rendimiento decreciente, y el bloque mensual del bureau lo muestra con claridad: 27,3 millones de filas, la tabla más grande del conjunto, aportaron 0,002 sobre los agregados simples.
 
@@ -349,11 +351,11 @@ El dataset de Properati contiene 992.192 avisos (25 columnas, julio 2019 a julio
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Dataset completo & --- & 992.192 \\ \midrule
-Argentina y operación de venta & El alquiler tiene precio mensual: otra unidad & 750.694 \\ \midrule
-Solo precios en dólares & Convertir pesos exigiría el tipo de cambio de cada fecha & 685.465 \\ \midrule
-Casa, Departamento y PH & Lotes y cocheras son otro producto, con otra lógica de precio & 383.118 \\ \midrule
-Precio entre 20.000 y 1.000.000 & Alcance: vivienda residencial, ni irrisorias ni suntuarias & 376.281 \\ \midrule
+Dataset completo & --- & 992.192 \\
+Argentina y operación de venta & El alquiler tiene precio mensual: otra unidad & 750.694 \\
+Solo precios en dólares & Convertir pesos exigiría el tipo de cambio de cada fecha & 685.465 \\
+Casa, Departamento y PH & Lotes y cocheras son otro producto, con otra lógica de precio & 383.118 \\
+Precio entre 20.000 y 1.000.000 & Alcance: vivienda residencial, ni irrisorias ni suntuarias & 376.281 \\
 Con superficie informada & Sin superficie no hay tasación posible & 237.686 \\
 \end{longtable}
 
@@ -386,8 +388,8 @@ El baseline es el modelo más simple que resuelve la tarea: predecir siempre la 
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Baseline (mediana) & 117.672 & 59,2\% & --- \\ \midrule
-Boosting sobre el precio & 50.245 & 27,1\% & 57,3\% \\ \midrule
+Baseline (mediana) & 117.672 & 59,2\% & --- \\
+Boosting sobre el precio & 50.245 & 27,1\% & 57,3\% \\
 Boosting sobre log(precio) & 50.573 & 24,9\% & 57,0\% \\
 \end{longtable}
 
@@ -399,7 +401,7 @@ Desagregar el error por rango de precio revela un patrón que el promedio escond
 
 Entrenar sobre el logaritmo del precio ataca la causa: la distribución de precios es muy asimétrica y en escala logarítmica se vuelve casi simétrica.
 
-\begin{figure}[H]
+\begin{figure}[htb]
 \centering
 \includegraphics[width=0.89\linewidth]{media/figura4_sesgo_por_rango.png}
 \caption*{Figura 4. Sesgo promedio por rango de precio. Valores positivos indican sobreestimación. La transformación logarítmica reduce el sesgo en los tres rangos inferiores y lo agrava en el superior.}
@@ -424,13 +426,13 @@ La importancia por permutación mide cuánto empeora el error al desordenar una 
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Superficie & 0,248 \\ \midrule
-Barrio (l3) & 0,169 \\ \midrule
-Baños & 0,118 \\ \midrule
-Ambientes & 0,020 \\ \midrule
-Tipo de propiedad & 0,016 \\ \midrule
-Dormitorios & 0,012 \\ \midrule
-Longitud / Latitud & 0,012 / 0,011 \\ \midrule
+Superficie & 0,248 \\
+Barrio (l3) & 0,169 \\
+Baños & 0,118 \\
+Ambientes & 0,020 \\
+Tipo de propiedad & 0,016 \\
+Dormitorios & 0,012 \\
+Longitud / Latitud & 0,012 / 0,011 \\
 Provincia (l2) & 0,001 \\
 \end{longtable}
 
@@ -450,7 +452,7 @@ El dato de cierre a nivel operación no está disponible ---las escrituras no so
 
 \textbf{Desafío 2 --- El modelo se degrada y requiere monitoreo.} El error relativo crece de forma sostenida a lo largo del período de evaluación, a razón de unos 0,85 puntos porcentuales por mes.
 
-\begin{figure}[H]
+\begin{figure}[htb]
 \centering
 \includegraphics[width=0.86\linewidth]{media/figura5_error_por_mes.png}
 \caption*{Figura 5. Error relativo del modelo por mes de publicación, sobre el conjunto de evaluación (abril a julio de 2020).}
@@ -476,12 +478,12 @@ La política que se desprende es reentrenar trimestralmente: con una degradació
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Compra con 30\% por debajo del valor de mercado & Umbral que define una candidata & USD 91.890 \\ \midrule
-Gastos de compra (escribano, sellos, certificaciones): 6\% & La Nación, abril 2026 (rango 5\%--8\%) & USD 5.513 \\ \midrule
-Refacción media: baño, cocina y pintura & Reporte Inmobiliario, enero 2026 & USD 14.000 \\ \midrule
-Inversión total & & USD 111.403 \\ \midrule
-Venta a valor de mercado, neta de 5,5\% de gastos & Comisión 3--4\% más mitad del sellado & USD 124.052 \\ \midrule
-Margen por operación & & USD 12.649 \\ \midrule
+Compra con 30\% por debajo del valor de mercado & Umbral que define una candidata & USD 91.890 \\
+Gastos de compra (escribano, sellos, certificaciones): 6\% & La Nación, abril 2026 (rango 5\%--8\%) & USD 5.513 \\
+Refacción media: baño, cocina y pintura & Reporte Inmobiliario, enero 2026 & USD 14.000 \\
+Inversión total & & USD 111.403 \\
+Venta a valor de mercado, neta de 5,5\% de gastos & Comisión 3--4\% más mitad del sellado & USD 124.052 \\
+Margen por operación & & USD 12.649 \\
 Operación del sistema (datos, cómputo, mantenimiento) & Estimación propia & USD 400 por mes \\
 \end{longtable}
 
@@ -536,15 +538,15 @@ La contracara es que ese beneficio supone que las candidatas son oportunidades r
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-src/features.py & Feature engineering de la Parte 1 (application, bureau, previous, installments) \\ \midrule
-src/features\_\allowbreak{}bureau.py & Features de bureau y bureau\_\allowbreak{}balance con agregación en dos niveles \\ \midrule
-src/eval\_\allowbreak{}bureau.py & Comparación de las variantes de bureau sobre los folds fijos \\ \midrule
-src/models.py & Logística baseline y LightGBM (categóricas nativas u one-hot) \\ \midrule
-src/cv.py & Validación cruzada con los folds fijos (OOF, AUC y predicción de test) \\ \midrule
-src/make\_\allowbreak{}folds.py & Genera y versiona la partición en 5 folds estratificados \\ \midrule
-src/tuning.py & Optimización de hiperparámetros con Optuna \\ \midrule
-src/interpretability.py & Importancia por ganancia y valores SHAP \\ \midrule
-src/parte2\_\allowbreak{}properati.py & Parte 2 completa: filtros, partición temporal, baseline, prototipo y diagnósticos \\ \midrule
+src/features.py & Feature engineering de la Parte 1 (application, bureau, previous, installments) \\
+src/features\_\allowbreak{}bureau.py & Features de bureau y bureau\_\allowbreak{}balance con agregación en dos niveles \\
+src/eval\_\allowbreak{}bureau.py & Comparación de las variantes de bureau sobre los folds fijos \\
+src/models.py & Logística baseline y LightGBM (categóricas nativas u one-hot) \\
+src/cv.py & Validación cruzada con los folds fijos (OOF, AUC y predicción de test) \\
+src/make\_\allowbreak{}folds.py & Genera y versiona la partición en 5 folds estratificados \\
+src/tuning.py & Optimización de hiperparámetros con Optuna \\
+src/interpretability.py & Importancia por ganancia y valores SHAP \\
+src/parte2\_\allowbreak{}properati.py & Parte 2 completa: filtros, partición temporal, baseline, prototipo y diagnósticos \\
 resultados/ y resultados\_\allowbreak{}parte2/ & Tablas y figuras que se citan en este informe \\
 \end{longtable}
 
