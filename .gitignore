@@ -4,6 +4,8 @@ data/raw/*
 
 # Features agregadas (pesadas y reproducibles: python -m src.features_bureau)
 data/features_*.parquet
+data/cache/
+resultados_bureau/parciales/
 data/features_*.csv.gz
 
 # Submissions generadas (se regeneran corriendo el notebook)
